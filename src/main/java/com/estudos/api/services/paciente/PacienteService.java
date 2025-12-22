@@ -11,9 +11,7 @@ import com.estudos.api.services.date.getIdade;
 import com.estudos.api.services.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +24,9 @@ public class PacienteService{
     @Autowired
     private ValidationService validate;
 
-    public boolean buscarPorTelefone (String telefone){
-        Paciente paciente = pacienteRepository.findByTelefone(telefone);
-        return paciente.getTelefone().isEmpty();
+    public boolean buscarPorCpf (String cpf){
+        Paciente paciente = pacienteRepository.findByCpf(cpf);
+        return paciente.getCpf().isEmpty();
     }
 
     public List<PacienteResponseDTO> visualizar(String nome){
@@ -51,7 +49,7 @@ public class PacienteService{
 
     public void cadastrar(PacienteResquestDTO dto){
         validate.validateAll(dto);
-        if(!(buscarPorTelefone(dto.telefone()))) throw new EntidadePreExistente("Ja existe um paciente com esse telefone cadastrado no sistema");
+        if(!(buscarPorCpf(dto.cpf()))) throw new EntidadePreExistente("Ja existe um paciente com esse telefone cadastrado no sistema");
         Paciente paciente = new Paciente();
         paciente.setNome(dto.nome());
         paciente.setDataDeNascimento(dto.dataDeNascimento());
@@ -64,6 +62,4 @@ public class PacienteService{
         paciente.setTratamento(dto.tratamento());
         pacienteRepository.save(paciente);
     }
-
-
 }
