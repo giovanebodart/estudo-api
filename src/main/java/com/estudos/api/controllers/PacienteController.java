@@ -2,6 +2,7 @@ package com.estudos.api.controllers;
 
 import com.estudos.api.domain.pacienteDTO.PacienteResponseDTO;
 import com.estudos.api.domain.pacienteDTO.PacienteResquestDTO;
+import com.estudos.api.domain.pacienteDTO.PacienteUpdateDTO;
 import com.estudos.api.services.paciente.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pacientes")
@@ -30,14 +32,14 @@ public class PacienteController {
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity deletarPaciente(@RequestBody String cpf){
-
+    public ResponseEntity deletarPaciente(@RequestParam String Id){
+        service.deletar(Id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/editar")
-    public ResponseEntity editarPacientes(@RequestBody PacienteResquestDTO dto){
-
+    public ResponseEntity editarPacientes(@RequestParam String Id, @RequestBody PacienteUpdateDTO dto){
+        service.atualizar(Id, dto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

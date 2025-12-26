@@ -1,5 +1,6 @@
 package com.estudos.api.services.validation;
 
+import com.estudos.api.domain.paciente.Paciente;
 import com.estudos.api.domain.pacienteDTO.PacienteResquestDTO;
 import com.estudos.api.execptions.ValorInvalido;
 import org.springframework.stereotype.Service;

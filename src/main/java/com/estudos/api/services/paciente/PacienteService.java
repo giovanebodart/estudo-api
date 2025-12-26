@@ -3,6 +3,7 @@ package com.estudos.api.services.paciente;
 import com.estudos.api.domain.paciente.Paciente;
 import com.estudos.api.domain.pacienteDTO.PacienteResponseDTO;
 import com.estudos.api.domain.pacienteDTO.PacienteResquestDTO;
+import com.estudos.api.domain.pacienteDTO.PacienteUpdateDTO;
 import com.estudos.api.execptions.EntidadePreExistente;
 import com.estudos.api.execptions.ValorInvalido;
 import com.estudos.api.execptions.ValorNaoEncontrado;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PacienteService{
@@ -24,9 +26,8 @@ public class PacienteService{
     @Autowired
     private ValidationService validate;
 
-    public boolean buscarPorCpf (String cpf){
-        Paciente paciente = pacienteRepository.findByCpf(cpf);
-        return paciente.getCpf().isEmpty();
+    public Optional<Paciente> buscarPorId(String id){
+        return pacienteRepository.findById(id);
     }
 
     public List<PacienteResponseDTO> visualizar(String nome){
@@ -49,7 +50,6 @@ public class PacienteService{
 
     public void cadastrar(PacienteResquestDTO dto){
         validate.validateAll(dto);
-        if(!(buscarPorCpf(dto.cpf()))) throw new EntidadePreExistente("Ja existe um paciente com esse telefone cadastrado no sistema");
         Paciente paciente = new Paciente();
         paciente.setNome(dto.nome());
         paciente.setDataDeNascimento(dto.dataDeNascimento());
@@ -60,6 +60,20 @@ public class PacienteService{
         paciente.setPeso(dto.peso());
         paciente.setDiagnostico(dto.diagnostico());
         paciente.setTratamento(dto.tratamento());
+        pacienteRepository.save(paciente);
+    }
+
+    public void deletar(String Id) {
+        Paciente paciente = buscarPorId(Id).orElseThrow(() -> new ValorNaoEncontrado("Não foi encontrado nenhum registro"));
+        pacienteRepository.delete(paciente);
+    }
+
+    public void atualizar(String Id, PacienteUpdateDTO pacienteAtualizar){
+        Paciente paciente = buscarPorId(Id).get();
+        paciente.setNome(pacienteAtualizar.nome());
+        paciente.setTelefone(pacienteAtualizar.telefone());
+        paciente.setPeso(pacienteAtualizar.peso());
+        paciente.setAltura(pacienteAtualizar.altura());
         pacienteRepository.save(paciente);
     }
 }
