@@ -1,4 +1,4 @@
-package com.estudos.api.domain.pacienteDTO;
+package com.estudos.api.domain.entitiesDTO;
 
 import java.time.LocalDate;
 

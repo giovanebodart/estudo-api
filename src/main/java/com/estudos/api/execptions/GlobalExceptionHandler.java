@@ -1,24 +1,24 @@
 package com.estudos.api.execptions;
 
-import org.springframework.http.HttpStatus;
+import com.estudos.api.domain.statusDTO.ErrorDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(ValorInvalido.class)
-    public ResponseEntity<String> handleNomeInvalido(ValorInvalido ex){
+    public ResponseEntity<ErrorDTO> handleValorInvalido(ValorInvalido ex){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ex.getMessage());
+                .ofNullable(new ErrorDTO("403", "BAD_REQUEST", ex.getMessage(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(ValorNaoEncontrado.class)
-    public ResponseEntity<String> handleNomeNaoEncontrado(ValorNaoEncontrado ex) {
+    public ResponseEntity<ErrorDTO> handleValorNaoEncontrado(ValorNaoEncontrado ex) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
+                .ofNullable(new ErrorDTO("404", "NOT_FOUND", ex.getMessage(), LocalDateTime.now()));
     }
 }

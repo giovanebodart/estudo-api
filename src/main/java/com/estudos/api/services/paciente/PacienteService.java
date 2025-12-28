@@ -1,10 +1,8 @@
 package com.estudos.api.services.paciente;
 
-import com.estudos.api.domain.paciente.Paciente;
-import com.estudos.api.domain.pacienteDTO.PacienteResponseDTO;
-import com.estudos.api.domain.pacienteDTO.PacienteResquestDTO;
-import com.estudos.api.domain.pacienteDTO.PacienteUpdateDTO;
-import com.estudos.api.execptions.EntidadePreExistente;
+import com.estudos.api.domain.entities.Paciente;
+import com.estudos.api.domain.entitiesDTO.PacienteResponseDTO;
+import com.estudos.api.domain.entitiesDTO.PacienteResquestDTO;
 import com.estudos.api.execptions.ValorInvalido;
 import com.estudos.api.execptions.ValorNaoEncontrado;
 import com.estudos.api.repository.PacienteRepository;
@@ -13,6 +11,7 @@ import com.estudos.api.services.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,12 +67,35 @@ public class PacienteService{
         pacienteRepository.delete(paciente);
     }
 
-    public void atualizar(String Id, PacienteUpdateDTO pacienteAtualizar){
+    public void atualizar(String Id, PacienteResquestDTO pacienteAtualizar){
         Paciente paciente = buscarPorId(Id).get();
-        paciente.setNome(pacienteAtualizar.nome());
-        paciente.setTelefone(pacienteAtualizar.telefone());
-        paciente.setPeso(pacienteAtualizar.peso());
-        paciente.setAltura(pacienteAtualizar.altura());
+        String nome = paciente.getNome().equals(pacienteAtualizar.nome()) || pacienteAtualizar.nome() == null
+                ? paciente.getNome() : pacienteAtualizar.nome();
+        Double peso = paciente.getPeso().equals(pacienteAtualizar.peso()) || pacienteAtualizar.peso() == null
+                ? paciente.getPeso() : pacienteAtualizar.peso();
+        Double altura = paciente.getAltura().equals(pacienteAtualizar.altura()) || pacienteAtualizar.altura() == null
+                ? paciente.getAltura() : pacienteAtualizar.altura();
+        String telefone = paciente.getTelefone().equals(pacienteAtualizar.telefone()) || pacienteAtualizar.telefone() == null
+                ? paciente.getTelefone() : pacienteAtualizar.telefone();
+        String diagnostico = paciente.getDiagnostico().equals(pacienteAtualizar.diagnostico()) || pacienteAtualizar.diagnostico() == null
+                ? paciente.getDiagnostico() : pacienteAtualizar.diagnostico();
+        String tratamento = paciente.getTratamento().equals(pacienteAtualizar.tratamento()) || pacienteAtualizar.tratamento() == null
+                ? paciente.getTratamento() : pacienteAtualizar.tratamento();
+        LocalDate dateDeNascimento = paciente.getDataDeNascimento().equals(pacienteAtualizar.dataDeNascimento()) || pacienteAtualizar.dataDeNascimento() == null
+                ? paciente.getDataDeNascimento() : pacienteAtualizar.dataDeNascimento();
+        String sexo = paciente.getSexo().equals(pacienteAtualizar.sexo()) || pacienteAtualizar.sexo() == null
+                ? paciente.getSexo() : pacienteAtualizar.sexo();
+        String cpf = paciente.getCpf().equals(pacienteAtualizar.cpf()) || pacienteAtualizar.cpf() == null
+                ? paciente.getCpf() : pacienteAtualizar.cpf();
+        paciente.setNome(nome);
+        paciente.setTelefone(telefone);
+        paciente.setPeso(peso);
+        paciente.setAltura(altura);
+        paciente.setTratamento(tratamento);
+        paciente.setCpf(cpf);
+        paciente.setSexo(sexo);
+        paciente.setDataDeNascimento(dateDeNascimento);
+        paciente.setDiagnostico(diagnostico);
         pacienteRepository.save(paciente);
     }
 }

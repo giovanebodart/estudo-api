@@ -1,10 +1,9 @@
-package com.estudos.api.domain.paciente;
+package com.estudos.api.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Table(name = "pacientes")
 @Entity(name = "pacientes")
