@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/pacientes")
 public class PacienteController {
 
-    private final int QTD_PACIENTES = 100;
     @Autowired
     private PacienteService service;
 
@@ -28,18 +27,18 @@ public class PacienteController {
     @PostMapping
     public ResponseEntity cadastrarPacientes(@RequestBody PacienteResquestDTO dto){
         service.cadastrar(dto);
-        return  ResponseEntity.ofNullable(new okDTO("200", "Operção realizada com êxito", LocalDateTime.now()));
+        return  ResponseEntity.ofNullable(new okDTO("200", "Cadastro bem sucedido", LocalDateTime.now()));
     }
 
     @DeleteMapping
     public ResponseEntity deletarPaciente(@RequestParam String Id){
         service.deletar(Id);
-        return ResponseEntity.ofNullable(new okDTO("200", "Operção realizada com êxito", LocalDateTime.now()));
+        return ResponseEntity.ofNullable(new okDTO("200", "Exclusão bem sucedida", LocalDateTime.now()));
     }
 
     @PutMapping
     public ResponseEntity editarPacientes(@RequestParam String Id, @RequestBody PacienteResquestDTO dto){
         service.atualizar(Id, dto);
-        return ResponseEntity.ofNullable(new okDTO("200", "Operação realizada com êxito", LocalDateTime.now()));
+        return ResponseEntity.ofNullable(new okDTO("200", "Edição bem sucedida", LocalDateTime.now()));
     }
 }

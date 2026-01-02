@@ -6,12 +6,12 @@ import com.estudos.api.domain.entitiesDTO.PacienteResquestDTO;
 import com.estudos.api.execptions.ValorInvalido;
 import com.estudos.api.execptions.ValorNaoEncontrado;
 import com.estudos.api.repository.PacienteRepository;
-import com.estudos.api.services.date.getIdade;
 import com.estudos.api.services.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +20,6 @@ import java.util.Optional;
 public class PacienteService{
     @Autowired
     private PacienteRepository pacienteRepository;
-    @Autowired
-    private getIdade getIdade;
     @Autowired
     private ValidationService validate;
 
@@ -37,7 +35,7 @@ public class PacienteService{
         for (Paciente paciente: pacienteList){
             PacienteResponseDTO pacienteDTO = new PacienteResponseDTO(
                     paciente.getNome(),
-                    getIdade.idade(paciente.getDataDeNascimento()),
+                    PacienteService.getIdade(paciente.getDataDeNascimento()),
                     paciente.getPeso(),
                     paciente.getAltura(),
                     paciente.getDiagnostico(),
@@ -97,5 +95,10 @@ public class PacienteService{
         paciente.setDataDeNascimento(dateDeNascimento);
         paciente.setDiagnostico(diagnostico);
         pacienteRepository.save(paciente);
+    }
+    public static Integer getIdade(LocalDate dataDeNascimeto){
+        LocalDate now = LocalDate.now();
+        Period period = Period.between(dataDeNascimeto, now);
+        return period.getYears();
     }
 }
