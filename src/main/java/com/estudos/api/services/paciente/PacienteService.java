@@ -27,6 +27,13 @@ public class PacienteService{
         return pacienteRepository.findById(id);
     }
 
+    /**
+     *
+     * @param nome
+     * @return Lista com o nome dos pacientes que possuem nomes parecidos ou iguais
+     * @throws  ValorInvalido caso o valor passodo por parâmetro seja inválido
+     * @throws ValorNaoEncontrado caso nenhum paciente com o nome seja encontrado
+     */
     public List<PacienteResponseDTO> visualizar(String nome){
         if(!(validate.nameValidation(nome))) throw new ValorInvalido("Nome inválido");
         List<Paciente> pacienteList = pacienteRepository.findByNome(nome);
@@ -45,6 +52,10 @@ public class PacienteService{
         return pacienteListDTO;
     }
 
+    /**
+     *
+     * @param dto com as informações pertinentes ao request
+     */
     public void cadastrar(PacienteResquestDTO dto){
         validate.validateAll(dto);
         Paciente paciente = new Paciente();
@@ -60,10 +71,23 @@ public class PacienteService{
         pacienteRepository.save(paciente);
     }
 
+    /**
+     *
+      * @param Id
+     * @throws ValorNaoEncontrado caso nenhum paciente com o nome seja encontrado
+     */
     public void deletar(String Id) {
         Paciente paciente = buscarPorId(Id).orElseThrow(() -> new ValorNaoEncontrado("Não foi encontrado nenhum registro"));
         pacienteRepository.delete(paciente);
     }
+
+    /**
+     *
+     * @param Id
+     * @param pacienteAtualizar DTO com as informações a serem atualizadas do paciente
+     * @throws ValorInvalido caso o valor passodo por parâmetro seja inválido
+     * @throws ValorNaoEncontrado caso nenhum paciente com o nome seja encontrado
+     */
 
     public void atualizar(String Id, PacienteResquestDTO pacienteAtualizar){
         Paciente paciente = buscarPorId(Id).get();
@@ -85,6 +109,7 @@ public class PacienteService{
                 ? paciente.getSexo() : pacienteAtualizar.sexo();
         String cpf = paciente.getCpf().equals(pacienteAtualizar.cpf()) || pacienteAtualizar.cpf() == null
                 ? paciente.getCpf() : pacienteAtualizar.cpf();
+
         paciente.setNome(nome);
         paciente.setTelefone(telefone);
         paciente.setPeso(peso);
@@ -96,6 +121,13 @@ public class PacienteService{
         paciente.setDiagnostico(diagnostico);
         pacienteRepository.save(paciente);
     }
+
+    /**
+     *
+     * @param dataDeNascimeto
+     * @return Idade do paciente em anos
+     */
+
     public static Integer getIdade(LocalDate dataDeNascimeto){
         LocalDate now = LocalDate.now();
         Period period = Period.between(dataDeNascimeto, now);
